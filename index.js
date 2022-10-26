@@ -2,12 +2,21 @@ let id = 0
 
 const tarefa = (id, novaTarefa) => `<div>
 <p id='${id}'>${novaTarefa}</p>
-<input type="checkbox" />
+<input type="checkbox" onchange="marcarTarefa(${id})"/>
 <button onclick="removerTarefa(${id})">Remover</button>
 </div>`
 
+const marcarTarefa = (id) => {
+    const strike = document.getElementById(`strike${id}`)
+    if(strike){
+        document.getElementById(id).innerHTML = strike.innerHTML
+    } else {
+        const tarefaConcluida = document.getElementById(id).innerHTML
+        document.getElementById(id).innerHTML = `<strike id='strike${id}'>${tarefaConcluida}</strike`
+    }
+}
+
 function exibirLista() {
-    console.log('called')
     const tarefas = JSON.parse(localStorage.getItem('lista-tarefas'))
     if(tarefas){
         tarefas.forEach(tarefaListada => {
@@ -21,14 +30,16 @@ const validarTarefa = (novaTarefa) => {
     let tarefaExistente = false
     const listaTarefas = JSON.parse(localStorage.getItem('lista-tarefas'))
 
-    listaTarefas.map(tarefa => {
-        if(tarefa === novaTarefa){
-            tarefaExistente = true
-            alert('Tarefa já existente')
-        }
-    })
-
-    return tarefaExistente
+    if(listaTarefas){
+        listaTarefas.map(tarefa => {
+            if(tarefa === novaTarefa){
+                tarefaExistente = true
+                alert('Tarefa já existente')
+            }
+        })
+    
+        return tarefaExistente
+    }
 }
 
 function adicionarTarefa(){
